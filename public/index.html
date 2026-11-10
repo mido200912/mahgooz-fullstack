@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>محجوز | MAHGOOZ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--green:#073b36;--green2:#0c5149;--mint:#eaf3f0;--ink:#172b2a;--muted:#788784;--line:#e7ece9;--gold:#e6a928;--paper:#fff;--shadow:0 8px 28px rgba(13,45,39,.08)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Tajawal',sans-serif;color:var(--ink);background:#f7f8f6;line-height:1.55}
+a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cursor:pointer}
+.wrap{width:min(1240px,94%);margin:auto}
+header{background:#fff;position:sticky;top:0;z-index:50;border-bottom:1px solid var(--line)}
+.nav{height:72px;display:flex;align-items:center;justify-content:space-between;gap:22px}
+.logo{display:flex;align-items:center;gap:6px;font-weight:900;color:var(--green);font-size:24px;white-space:nowrap}
+.logo img{width:34px;height:36px;object-fit:contain}
+.links{display:flex;gap:30px;font-size:15px;font-weight:600;color:#4c5d59}
+.links a.active,.links a:hover{color:var(--green);border-bottom:2px solid var(--green);padding-bottom:6px}
+.actions{display:flex;align-items:center;gap:12px}
+.btn{border:0;border-radius:10px;padding:11px 20px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.btn-dark{background:var(--green);color:#fff}.btn-dark:hover{background:var(--green2)}
+.btn-light{background:#f1f5f3;color:var(--green)}
+.btn-small{padding:8px 13px;font-size:13px;border-radius:8px}
+.user-link{font-size:14px;font-weight:600}
+.menu-btn{display:none;border:0;background:none;font-size:25px;color:var(--green)}
+.hero{min-height:360px;background:linear-gradient(90deg,rgba(9,28,23,.58),rgba(9,28,23,.14));}
+.hero{background-image:linear-gradient(90deg,rgba(7,28,24,.72),rgba(7,28,24,.18)),url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1800&q=85');background-position:center;background-size:cover}
+.hero-inner{padding:56px 0 35px;min-height:360px;display:flex;flex-direction:column;justify-content:center;color:white}
+.hero h1{font-size:clamp(30px,4vw,46px);font-weight:900;max-width:650px;line-height:1.25}
+.hero p{font-size:17px;margin-top:12px;color:#f0f4f1;max-width:570px}
+.searchbar{margin-top:30px;background:#fff;color:var(--ink);border-radius:18px;padding:12px;display:grid;grid-template-columns:1.15fr 1fr 1fr 1fr auto;gap:8px;max-width:950px;box-shadow:0 10px 30px #0002}
+.search-field{padding:8px 12px;border-left:1px solid var(--line);min-width:0}
+.search-field label{display:block;color:#89938f;font-size:12px;font-weight:600}
+.search-field select,.search-field input{border:0;background:transparent;width:100%;outline:none;color:var(--ink);font-weight:700;font-size:14px;padding-top:3px}
+.searchbar .btn{min-width:95px;border-radius:13px}
+section{padding:36px 0}
+.section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.section-title h2{font-size:24px;font-weight:900}
+.section-title a{font-size:13px;color:var(--green);font-weight:700}
+.categories{display:grid;grid-template-columns:repeat(7,minmax(100px,1fr));gap:12px}
+.cat{background:#fff;border:1px solid #f0f2f0;border-radius:14px;padding:18px 10px;text-align:center;transition:.2s;box-shadow:0 2px 9px #00000004}
+.cat:hover,.cat.active{background:var(--mint);border-color:#c7ded6;transform:translateY(-2px)}
+.cat-icon{font-size:25px;display:block;margin-bottom:8px}.cat strong{font-size:14px}
+.venues{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.venue{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 3px 12px #00000004;transition:transform .2s,box-shadow .2s}
+.venue:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.venue-img{height:180px;position:relative;background:#d8e5de}
+.venue-img img{width:100%;height:100%;object-fit:cover;display:block}
+.heart{position:absolute;top:12px;right:12px;width:32px;height:32px;background:#ffffffeb;border:0;border-radius:50%;font-size:18px;color:#52645f}
+.heart.saved{color:#d54a55}
+.venue-content{padding:15px}
+.venue-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.venue h3{font-size:18px;font-weight:900}
+.rating{white-space:nowrap;color:var(--ink);font-weight:800;font-size:14px}.rating span{color:var(--gold)}
+.meta{font-size:13px;color:var(--muted);margin-top:4px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:11px 0}
+.tag{background:#f0f5f2;color:#54716a;border-radius:20px;padding:4px 9px;font-size:11px;font-weight:700}
+.venue-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.price{font-size:18px;font-weight:900;color:var(--green)}.price small{font-size:12px;color:var(--muted);font-weight:500}
+.capacity{font-size:12px;color:var(--muted)}
+.venue-actions{display:flex;gap:8px;margin-top:13px}.venue-actions button{flex:1}
+.packages{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.package{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);padding:14px;border-radius:15px}
+.package img{width:100px;height:94px;object-fit:cover;border-radius:10px}
+.package h3{font-size:16px;font-weight:800}.package p{font-size:12px;color:var(--muted);margin:4px 0 8px}.package strong{color:var(--green)}
+footer{background:var(--green);color:#dbe8e4;padding:32px 0;margin-top:20px}
+.footer-inner{display:flex;justify-content:space-between;gap:25px;align-items:center}.footer-inner .logo{color:white}.footer-inner p{font-size:13px;max-width:500px;color:#c2d6d0}
+.modal-backdrop{position:fixed;inset:0;background:#0c2925a8;display:none;align-items:center;justify-content:center;padding:18px;z-index:100}
+.modal-backdrop.open{display:flex}.modal{background:#fff;border-radius:18px;width:min(520px,100%);padding:24px;max-height:90vh;overflow:auto}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.modal-head h2{font-size:22px}.close{border:0;background:#edf3f0;color:var(--green);border-radius:50%;width:32px;height:32px;font-size:18px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-bottom:13px}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:5px}.field input,.field select,.field textarea{width:100%;border:1px solid #dfe8e3;border-radius:10px;padding:11px;background:#fbfcfb;outline-color:#9bbeb2}
+.notice{font-size:12px;color:var(--muted);margin-top:12px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--green);color:white;padding:12px 20px;border-radius:12px;display:none;z-index:150;font-weight:700}.toast.show{display:block}
+@media(max-width:1000px){.venues{grid-template-columns:repeat(2,1fr)}.categories{grid-template-columns:repeat(4,1fr)}.packages{grid-template-columns:1fr 1fr}.searchbar{grid-template-columns:repeat(2,1fr)}.searchbar .btn{grid-column:span 2}.search-field{border:0}}
+@media(max-width:700px){.nav{height:62px}.links{display:none}.user-link{display:block;font-size:13px}.menu-btn{display:block}.actions .btn{padding:8px 12px;font-size:12px}.logo{font-size:20px}.hero-inner{padding:40px 0 28px;min-height:400px}.hero p{font-size:15px}.searchbar{grid-template-columns:1fr 1fr;padding:8px}.search-field{padding:8px}.categories{grid-template-columns:repeat(3,1fr);gap:8px}.cat{padding:14px 6px}.cat strong{font-size:12px}.venues{grid-template-columns:1fr 1fr;gap:10px}.venue-img{height:135px}.venue-content{padding:11px}.venue h3{font-size:15px}.price{font-size:15px}.venue-actions{flex-direction:column}.section-title h2{font-size:20px}.packages{grid-template-columns:1fr}.footer-inner{flex-direction:column;align-items:flex-start}}
+@media(max-width:420px){.venues{grid-template-columns:1fr}.venue-img{height:185px}.categories{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr}}
+.booking-item{background:#fbfcfb;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px}
+.booking-item-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.booking-line{font-size:13px;color:#4c5d59;margin-top:6px}
+.booking-item .btn{margin-top:10px}
+.status{font-size:11px;font-weight:800;border-radius:20px;padding:4px 10px;white-space:nowrap}
+.status-pending{background:#fdf3dc;color:#966a0d}
+.status-confirmed{background:var(--mint);color:var(--green)}
+.status-completed{background:#e9f1fb;color:#315e93}
+.status-cancelled{background:#fbe9ea;color:#a33a42}
+.empty-state{text-align:center;padding:24px 10px;color:var(--muted)}
+.empty-state span{font-size:34px;display:block;margin-bottom:8px}
+.empty-state p{margin-bottom:14px;font-size:14px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#home"><img src="/logo.png" alt="شعار محجوز">محجوز</a>
+    <nav class="links"><a class="active" href="#home">الرئيسية</a><a href="#venues">الأماكن</a><a href="#occasions">المناسبات</a><a href="#packages">عن محجوز</a><a href="#" onclick="showMyBookings();return false">حجوزاتي</a></nav>
+    <div class="actions"><a class="user-link" id="userLink" href="#" onclick="openAuth('login');return false">تسجيل الدخول</a><button class="btn btn-dark" id="navAuthBtn" onclick="openAuth('register')">إنشاء حساب</button><button class="menu-btn" aria-label="القائمة" onclick="showToast('استخدم روابط الأقسام بالتمرير')">☰</button></div>
+  </div>
+</header>
+<main>
+<section class="hero" id="home"><div class="wrap hero-inner">
+  <h1>احجز مناسبتك في مكانك المفضل</h1>
+  <p>من الكافيهات والمطاعم إلى القاعات وأماكن التجمعات.<br>كل ما تحتاجه لمناسبتك في مكان واحد.</p>
+  <div class="searchbar">
+    <div class="search-field"><label>نوع المناسبة</label><select id="searchOcc"><option value="">عيد ميلاد</option><option>تخرج</option><option>خروجة عائلية</option><option>احتفال عائلي</option><option>مناسبة أخرى</option></select></div>
+    <div class="search-field"><label>المنطقة</label><select id="searchArea"><option>الفيوم</option><option>القاهرة</option><option>الجيزة</option></select></div>
+    <div class="search-field"><label>عدد الأفراد</label><select id="searchCount"><option value="10">10-20</option><option value="20">20-30</option><option value="50">30-50</option></select></div>
+    <div class="search-field"><label>التاريخ</label><input id="searchDate" type="date"></div>
+    <button class="btn btn-dark" onclick="searchVenues()">ابحث</button>
+  </div>
+</div></section>
+<section id="occasions"><div class="wrap">
+  <div class="section-title"><h2>اختر مناسبتك</h2><a href="#venues">عرض الكل</a></div>
+  <div class="categories" id="categories">
+    <button class="cat" data-tag="عيد ميلاد"><span class="cat-icon">🎂</span><strong>عيد ميلاد</strong></button>
+    <button class="cat" data-tag="تخرج"><span class="cat-icon">🎓</span><strong>تخرج</strong></button>
+    <button class="cat" data-tag="خروجة عائلية"><span class="cat-icon">👨‍👩‍👧‍👦</span><strong>خروجات عائلية</strong></button>
+    <button class="cat" data-tag="احتفال عائلي"><span class="cat-icon">🎉</span><strong>احتفال عائلي</strong></button>
+    <button class="cat" data-tag="خطوبة"><span class="cat-icon">💍</span><strong>خطوبات ومناسبات</strong></button>
+    <button class="cat" data-tag="أصحاب"><span class="cat-icon">🫂</span><strong>خروجة أصحاب</strong></button>
+    <button class="cat" data-tag="مناسبة أخرى"><span class="cat-icon">✨</span><strong>مناسبة أخرى</strong></button>
+  </div>
+</div></section>
+<section id="venues"><div class="wrap">
+  <div class="section-title"><h2>أماكن مميزة لك</h2><a href="#venues" onclick="clearFilters();return false">عرض الكل</a></div>
+  <div class="venues" id="venueGrid">
+    <article class="venue" data-tags="عيد ميلاد أصحاب" data-capacity="20"><div class="venue-img"><img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=800&q=85" alt="كافيه فيوليت"><button class="heart" aria-label="إضافة للمفضلة" onclick="toggleHeart(this)">♡</button></div><div class="venue-content"><div class="venue-head"><h3>كافيه فيوليت</h3><div class="rating"><span>★</span> 4.7</div></div><p class="meta">الفيوم · كافيه</p><div class="tags"><span class="tag">جلسات خارجية</span><span class="tag">عيد ميلاد</span></div><div class="venue-bottom"><div class="price">من 1,000 ج.م</div><span class="capacity">10-20 فرد</span></div><div class="venue-actions"><button class="btn btn-light btn-small" onclick="venueDetails('كافيه فيوليت')">التفاصيل</button><button class="btn btn-dark btn-small" onclick="openBooking('كافيه فيوليت')">احجز الآن</button></div></div></article>
+    <article class="venue" data-tags="تخرج احتفال عائلي" data-capacity="60"><div class="venue-img"><img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=800&q=85" alt="قاعة جاردن"><button class="heart" aria-label="إضافة للمفضلة" onclick="toggleHeart(this)">♡</button></div><div class="venue-content"><div class="venue-head"><h3>قاعة جاردن</h3><div class="rating"><span>★</span> 4.8</div></div><p class="meta">6 أكتوبر · الجيزة</p><div class="tags"><span class="tag">قاعة خاصة</span><span class="tag">مناسبات متنوعة</span></div><div class="venue-bottom"><div class="price">من 2,500 ج.م</div><span class="capacity">20-60 فرد</span></div><div class="venue-actions"><button class="btn btn-light btn-small" onclick="venueDetails('قاعة جاردن')">التفاصيل</button><button class="btn btn-dark btn-small" onclick="openBooking('قاعة جاردن')">احجز الآن</button></div></div></article>
+    <article class="venue" data-tags="عيد ميلاد أصحاب" data-capacity="30"><div class="venue-img"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=85" alt="مطعم ذا جاردن"><button class="heart" aria-label="إضافة للمفضلة" onclick="toggleHeart(this)">♡</button></div><div class="venue-content"><div class="venue-head"><h3>مطعم ذا جاردن</h3><div class="rating"><span>★</span> 4.5</div></div><p class="meta">الفيوم · مطعم</p><div class="tags"><span class="tag">تجمعات صغيرة</span><span class="tag">جلسات مميزة</span></div><div class="venue-bottom"><div class="price">من 1,200 ج.م</div><span class="capacity">15-30 فرد</span></div><div class="venue-actions"><button class="btn btn-light btn-small" onclick="venueDetails('مطعم ذا جاردن')">التفاصيل</button><button class="btn btn-dark btn-small" onclick="openBooking('مطعم ذا جاردن')">احجز الآن</button></div></div></article>
+    <article class="venue" data-tags="خروجة عائلية احتفال عائلي" data-capacity="25"><div class="venue-img"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=85" alt="كافيه لونا"><button class="heart" aria-label="إضافة للمفضلة" onclick="toggleHeart(this)">♡</button></div><div class="venue-content"><div class="venue-head"><h3>كافيه لونا</h3><div class="rating"><span>★</span> 4.9</div></div><p class="meta">الفيوم · القاهرة</p><div class="tags"><span class="tag">مناسبة عائلية</span><span class="tag">ديكور هادئ</span></div><div class="venue-bottom"><div class="price">من 800 ج.م</div><span class="capacity">10-25 فرد</span></div><div class="venue-actions"><button class="btn btn-light btn-small" onclick="venueDetails('كافيه لونا')">التفاصيل</button><button class="btn btn-dark btn-small" onclick="openBooking('كافيه لونا')">احجز الآن</button></div></div></article>
+  </div><p class="notice">* الأماكن والتقييمات والأسعار المعروضة بيانات تجريبية للتصميم.</p>
+</div></section>
+<section id="packages"><div class="wrap"><div class="section-title"><h2>الباقات المتاحة</h2><a href="#packages">عرض الكل</a></div><div class="packages">
+  <article class="package"><img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=300&q=80" alt="باقة عيد ميلاد" onerror="this.src='https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=300&q=80'"><div><h3>باقة عيد ميلاد</h3><p>ديكور مميز · كيكة · جلسة خاصة</p><strong>من 2,500 ج.م</strong></div></article>
+  <article class="package"><img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=300&q=80" alt="باقة تخرج"><div><h3>باقة تخرج</h3><p>طاولة خاصة · تصوير · ضيافة</p><strong>من 3,000 ج.م</strong></div></article>
+  <article class="package"><img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=300&q=80" alt="باقة عائلية"><div><h3>باقة مناسبة عائلية</h3><p>جلسة كاملة · قائمة طعام مميزة</p><strong>من 2,800 ج.م</strong></div></article>
+</div></div></section>
+</main>
+<footer><div class="wrap footer-inner"><div><a class="logo" href="#home"><img src="/logo.png" alt="">محجوز</a><p>منصة تجمع أماكن مناسباتك وخروجاتك في مكان واحد، لتكتشف وتقارن وتحجز بسهولة.</p></div><div>© 2026 محجوز — جميع الحقوق محفوظة</div></div></footer>
+<div class="modal-backdrop" id="bookingModal" onclick="if(event.target===this)closeBooking()"><div class="modal"><div class="modal-head"><h2 id="modalTitle">طلب حجز</h2><button class="close" onclick="closeBooking()">×</button></div><form id="bookingForm"><div class="field"><label>المناسبة</label><select id="bookOcc"><option>عيد ميلاد</option><option>تخرج</option><option>خروجة عائلية</option><option>احتفال عائلي</option><option>مناسبة أخرى</option></select></div><div class="form-grid"><div class="field"><label>التاريخ</label><input type="date" id="bookDate" required></div><div class="field"><label>الوقت</label><input type="time" id="bookTime" required></div></div><div class="form-grid"><div class="field"><label>عدد الأفراد</label><input type="number" id="bookCount" min="1" value="10" required></div><div class="field"><label>الاسم</label><input id="bookName" required></div></div><div class="field"><label>رقم الهاتف</label><input id="bookPhone" type="tel" required></div><div class="field"><label>ملاحظات إضافية (اختياري)</label><textarea id="bookNotes" rows="2"></textarea></div><button class="btn btn-dark" style="width:100%" type="submit">إرسال طلب الحجز</button><p class="notice" id="bookingHint"></p><p class="notice">سيتم حفظ طلبك في قاعدة بيانات الموقع المحلية.</p></form></div></div>
+
+<div class="modal-backdrop" id="authModal" onclick="if(event.target===this)closeAuth()"><div class="modal">
+<div class="modal-head"><h2 id="authTitle">تسجيل الدخول</h2><button class="close" onclick="closeAuth()">×</button></div>
+<form id="authForm">
+<div class="field" id="authNameField" style="display:none"><label>الاسم</label><input id="authName" autocomplete="name"></div>
+<div class="field"><label>البريد الإلكتروني</label><input id="authEmail" type="email" autocomplete="email" required></div>
+<div class="field"><label>كلمة المرور</label><input id="authPassword" type="password" minlength="8" autocomplete="current-password" required></div>
+<div class="field" id="authPhoneField" style="display:none"><label>رقم الهاتف (اختياري)</label><input id="authPhone" type="tel" autocomplete="tel"></div>
+<button class="btn btn-dark" style="width:100%" type="submit" id="authSubmit">دخول</button>
+<p class="notice"><span id="authSwitchText">ليس لديك حساب؟</span> <a href="#" id="authSwitch" style="color:var(--green);font-weight:800">إنشاء حساب</a></p>
+</form></div></div>
+<div class="modal-backdrop" id="bookingsModal" onclick="if(event.target===this)closeMyBookings()"><div class="modal">
+<div class="modal-head"><h2>حجوزاتي</h2><button class="close" onclick="closeMyBookings()">×</button></div>
+<div id="myBookingsList"></div>
+</div></div>
+<div class="modal-backdrop" id="venueModal" onclick="if(event.target===this)closeVenueDetails()"><div class="modal">
+<div class="modal-head"><h2>تفاصيل المكان</h2><button class="close" onclick="closeVenueDetails()">×</button></div>
+<div id="venueModalBody"></div>
+</div></div>
+<div class="toast" id="toast"></div>
+<script>let selectedVenue='';let selectedVenueId=null;</script>
+<script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>لوحة إدارة محجوز</title><link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f7f5;color:#17332e;font-family:Tajawal,sans-serif}
+header{background:#073b36;color:white;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;gap:14px}h1{font-size:22px;margin:0}
+main{width:min(1150px,94%);margin:25px auto}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat,.panel{background:white;border:1px solid #e4ece7;border-radius:14px;padding:18px;margin-bottom:18px}.stat strong{display:block;font-size:28px}.stat span{color:#72817b}
+h2{font-size:20px;margin:0 0 14px}table{width:100%;border-collapse:collapse;background:white}th,td{text-align:right;padding:12px;border-bottom:1px solid #edf1ee;font-size:14px;white-space:nowrap}th{color:#60746c;background:#f7faf8}
+button,input,select{font:inherit}button{background:#073b36;color:white;border:0;border-radius:8px;padding:9px 13px;cursor:pointer}button:disabled{opacity:.6;cursor:default}button.ghost{background:#edf3f0;color:#073b36}select,input{border:1px solid #dce7e1;border-radius:8px;padding:9px;background:#fff}
+form{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}form button{grid-column:1/-1}.muted{color:#718079;font-size:13px}.scroll{overflow:auto}
+.head-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.badge{font-size:11px;font-weight:800;border-radius:20px;padding:4px 10px}.badge-on{background:#eaf3f0;color:#073b36}.badge-off{background:#fbe9ea;color:#a33a42}
+.login-card{max-width:420px;margin:8vh auto;background:#fff;border:1px solid #e4ece7;border-radius:18px;padding:26px;box-shadow:0 10px 30px rgba(13,45,39,.08)}
+.login-card h2{text-align:center}.login-card form{display:block}.login-card .field{margin-bottom:12px}.login-card label{display:block;font-size:13px;font-weight:700;margin-bottom:5px}.login-card input{width:100%;padding:11px}.login-card button{width:100%;margin-top:6px}
+.msg{border-radius:10px;padding:10px 12px;font-size:13px;font-weight:700;margin-bottom:12px;display:none}.msg.show{display:block}.msg.ok{background:#eaf3f0;color:#073b36}.msg.err{background:#fbe9ea;color:#a33a42}
+.empty{text-align:center;color:#718079;padding:26px 10px;font-size:14px}
+.hidden{display:none!important}
+@media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}form{grid-template-columns:1fr}header{flex-direction:column;align-items:flex-start}}
+</style></head><body>
+<header><h1>لوحة إدارة محجوز</h1><div class="head-actions"><a href="/" style="color:white">عرض الموقع</a><button class="ghost hidden" id="logoutBtn" onclick="logout()">تسجيل خروج</button></div></header>
+<main>
+<div id="message" class="msg"></div>
+
+<section class="login-card" id="loginCard">
+  <h2>دخول لوحة الإدارة</h2>
+  <p class="muted" style="text-align:center;margin-top:-6px">سجّل الدخول بحساب المدير للمتابعة.</p>
+  <form id="loginForm">
+    <div class="field"><label>البريد الإلكتروني</label><input id="loginEmail" type="email" autocomplete="email" required></div>
+    <div class="field"><label>كلمة المرور</label><input id="loginPassword" type="password" autocomplete="current-password" required></div>
+    <button type="submit" id="loginSubmit">دخول</button>
+  </form>
+  <p class="muted">الحساب الافتراضي: admin@mahgooz.local — كلمة المرور: Admin1234! (غيّرها قبل أي نشر خارجي).</p>
+</section>
+
+<div id="dashboard" class="hidden">
+<div class="stats" id="stats"></div>
+
+<section class="panel"><div class="head-actions" style="justify-content:space-between;margin-bottom:12px"><h2 style="margin:0">إضافة مكان جديد</h2><button class="ghost" onclick="load()">تحديث البيانات</button></div>
+<form id="venueForm">
+<input name="name" placeholder="اسم المكان" required><input name="city" placeholder="المدينة" required><input name="area" placeholder="المنطقة">
+<input name="venue_type" placeholder="نوع المكان (مطعم/كافيه/قاعة)" required><input name="price_from" type="number" min="0" placeholder="السعر يبدأ من" required><input name="capacity_max" type="number" min="1" placeholder="السعة القصوى" required>
+<input name="image_url" type="url" placeholder="رابط صورة المكان"><input name="tags" placeholder="التصنيفات، افصل بفاصلة"><input name="description" placeholder="وصف المكان">
+<button type="submit" id="venueSubmit">حفظ المكان في قاعدة البيانات</button></form></section>
+
+<section class="panel"><h2>طلبات الحجز</h2><div class="scroll"><table><thead><tr><th>رقم</th><th>الاسم</th><th>المكان</th><th>المناسبة</th><th>التاريخ</th><th>الأفراد</th><th>الهاتف</th><th>الحالة</th><th>تحديث</th></tr></thead><tbody id="bookings"></tbody></table></div></section>
+
+<section class="panel"><h2>الأماكن المسجلة</h2><div class="scroll"><table><thead><tr><th>رقم</th><th>المكان</th><th>المدينة</th><th>النوع</th><th>السعر من</th><th>السعة</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody id="venueRows"></tbody></table></div></section>
+</div>
+</main>
+<script>
+const TOKEN_KEY='mahgooz_token';
+let token=localStorage.getItem(TOKEN_KEY)||'';
+let currentUser=null;
+
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function money(n){return Number(n||0).toLocaleString('en-US')+' ج.م'}
+function statusLabel(s){return ({pending:'معلق',confirmed:'مؤكد',cancelled:'ملغي',completed:'مكتمل'}[s]||s)}
+function setMessage(text,type='ok'){const box=document.getElementById('message');box.textContent=text||'';box.className='msg'+(text?' show '+type:'')}
+async function api(path,opts={}){
+  const r=await fetch(path,{...opts,headers:{'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{}),...opts.headers}});
+  let d={};try{d=await r.json()}catch(e){}
+  if(!r.ok)throw Error(d.error||'حدث خطأ');
+  return d;
+}
+function logout(){localStorage.removeItem(TOKEN_KEY);token='';currentUser=null;location.href='/'}
+function showLogin(){document.getElementById('loginCard').classList.remove('hidden');document.getElementById('dashboard').classList.add('hidden');document.getElementById('logoutBtn').classList.add('hidden')}
+function showDashboard(){document.getElementById('loginCard').classList.add('hidden');document.getElementById('dashboard').classList.remove('hidden');document.getElementById('logoutBtn').classList.remove('hidden')}
+
+async function login(event){
+  event.preventDefault();
+  const btn=document.getElementById('loginSubmit');btn.disabled=true;setMessage('');
+  try{
+    const d=await api('/api/auth/login',{method:'POST',body:JSON.stringify({email:document.getElementById('loginEmail').value.trim(),password:document.getElementById('loginPassword').value})});
+    token=d.token;localStorage.setItem(TOKEN_KEY,token);currentUser=d.user;
+    if(d.user.role!=='admin'){token='';currentUser=null;localStorage.removeItem(TOKEN_KEY);throw Error('هذا الحساب ليس حساب مدير')}
+    document.getElementById('loginForm').reset();
+    showDashboard();await load();
+  }catch(e){setMessage(e.message,'err')}
+  finally{btn.disabled=false}
+}
+
+async function load(){
+  try{
+    const s=await api('/api/admin/stats');
+    document.getElementById('stats').innerHTML=[['المستخدمون',s.users],['الأماكن',s.venues],['الحجوزات',s.bookings],['طلبات معلقة',s.pending]].map(x=>`<div class="stat"><span>${x[0]}</span><strong>${x[1]}</strong></div>`).join('');
+
+    const b=await api('/api/admin/bookings');
+    document.getElementById('bookings').innerHTML=b.length?b.map(x=>`<tr><td>${Number(x.id)}</td><td>${esc(x.customer_name)}</td><td>${esc(x.venue_name)}</td><td>${esc(x.occasion)}</td><td><span dir="ltr">${esc(x.booking_date)} ${esc(x.booking_time)}</span></td><td>${Number(x.guest_count)}</td><td>${esc(x.customer_phone)}</td><td>${esc(statusLabel(x.status))}</td><td><select onchange="changeStatus(${Number(x.id)},this.value)"><option value="pending" ${x.status==='pending'?'selected':''}>معلق</option><option value="confirmed" ${x.status==='confirmed'?'selected':''}>مؤكد</option><option value="cancelled" ${x.status==='cancelled'?'selected':''}>ملغي</option><option value="completed" ${x.status==='completed'?'selected':''}>مكتمل</option></select></td></tr>`).join(''):'<tr><td colspan="9" class="empty">لا توجد حجوزات بعد</td></tr>';
+
+    const v=await api('/api/admin/venues');
+    document.getElementById('venueRows').innerHTML=v.length?v.map(x=>`<tr><td>${Number(x.id)}</td><td>${esc(x.name)}</td><td>${esc(x.city)}</td><td>${esc(x.venue_type)}</td><td>${money(x.price_from)}</td><td>${Number(x.capacity_min)}-${Number(x.capacity_max)}</td><td><span class="badge ${x.is_active?'badge-on':'badge-off'}">${x.is_active?'ظاهر':'مخفي'}</span></td><td><button class="ghost" onclick="toggleVenue(${Number(x.id)},${x.is_active?0:1},this)">${x.is_active?'إخفاء':'إظهار'}</button></td></tr>`).join(''):'<tr><td colspan="8" class="empty">لا توجد أماكن بعد</td></tr>';
+  }catch(e){setMessage(e.message+' — تأكد من تسجيل الدخول بحساب المدير.','err')}
+}
+
+async function changeStatus(id,status){
+  try{await api('/api/admin/bookings/'+id+'/status',{method:'PATCH',body:JSON.stringify({status})});setMessage('تم تحديث حالة الحجز','ok');await load()}catch(e){setMessage(e.message,'err')}
+}
+async function toggleVenue(id,active,btn){
+  btn.disabled=true;
+  try{await api('/api/admin/venues/'+id,{method:'PATCH',body:JSON.stringify({is_active:active})});setMessage(active?'تم إظهار المكان':'تم إخفاء المكان','ok');await load()}catch(e){btn.disabled=false;setMessage(e.message,'err')}
+}
+
+document.getElementById('loginForm').addEventListener('submit',login);
+document.getElementById('venueForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const btn=document.getElementById('venueSubmit');btn.disabled=true;
+  const d=Object.fromEntries(new FormData(e.target));
+  d.tags=d.tags.split(',').map(x=>x.trim()).filter(Boolean);d.price_from=Number(d.price_from);d.capacity_max=Number(d.capacity_max);
+  try{await api('/api/admin/venues',{method:'POST',body:JSON.stringify(d)});setMessage('تم إضافة المكان','ok');e.target.reset();await load()}catch(err){setMessage(err.message,'err')}
+  finally{btn.disabled=false}
+});
+
+(async function init(){
+  if(!token){showLogin();return}
+  try{
+    const me=await api('/api/auth/me');
+    if(me.user.role!=='admin'){token='';localStorage.removeItem(TOKEN_KEY);showLogin();setMessage('سجّل الدخول بحساب المدير','err');return}
+    currentUser=me.user;showDashboard();await load();
+  }catch(e){token='';localStorage.removeItem(TOKEN_KEY);showLogin()}
+})();
+</script></body></html>
