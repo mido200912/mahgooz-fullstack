@@ -98,9 +98,6 @@ const SEED_VENUES = [
   ['كافيه فيوليت', 'الفيوم', 'الفيوم - وسط المدينة', 'كافيه', 4.7, 1000, 10, 20,
     'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=800&q=85',
     'عيد ميلاد,أصحاب,جلسات خارجية', 'كافيه دافئ بإطلالة مفتوحة، مناسب للتجمعات الصغيرة وأعياد الميلاد.'],
-  ['قاعة جاردن', 'الجيزة', '6 أكتوبر - الجيزة', 'قاعة', 4.8, 2500, 20, 60,
-    'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=800&q=85',
-    'تخرج,احتفال عائلي,قاعة خاصة', 'قاعة خاصة بتجهيزات كاملة للحفلات والتخرج والمناسبات العائلية.'],
   ['مطعم ذا جاردن', 'الفيوم', 'الفيوم - كورنيش البحيرة', 'مطعم', 4.5, 1200, 15, 30,
     'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=85',
     'عيد ميلاد,أصحاب,تجمعات صغيرة', 'مطعم بحديقة داخلية وقوائم طعام متنوعة تناسب كل الأذواق.'],
@@ -110,24 +107,12 @@ const SEED_VENUES = [
   ['فيلا النخيل', 'الفيوم', 'الفيوم - طريق بحيرة قارون', 'فيلا', 4.6, 6500, 30, 120,
     'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=85',
     'خطوبة,احتفال عائلي,مناسبة أخرى', 'فيلا بحديقة خاصة ومسبح، مثالية لحفلات الخطوبة والمناسبات الكبيرة.'],
-  ['قاعة الأهرام', 'القاهرة', 'القاهرة - الهرم', 'قاعة', 4.4, 9000, 80, 400,
-    'https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&w=800&q=85',
-    'احتفال عائلي,مناسبة أخرى,حفلات', 'قاعة أفراح واسعة بإضاءة وصوت احترافي وسعة كبيرة.'],
   ['مطعم بحر', 'الفيوم', 'الفيوم - شاطئ بحيرة قارون', 'مطعم', 4.3, 950, 10, 45,
     'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=800&q=85',
     'خروجة عائلية,أصحاب,مناسبة أخرى', 'مطعم أسماك على البحيرة مع جلسات خارجية مفتوحة.'],
-  ['استوديو نور', 'القاهرة', 'القاهرة - المعادي', 'استوديو', 4.8, 1800, 5, 25,
-    'https://images.unsplash.com/photo-1520333789090-1afc82db536a?auto=format&fit=crop&w=800&q=85',
-    'عيد ميلاد,تخرج,مناسبة أخرى', 'استوديو تصوير مجهز بإضاءة وخلفيات متعددة لجلسات التصوير.'],
   ['حديقة الياسمين', 'الفيوم', 'الفيوم - دمو', 'حديقة', 4.2, 1500, 25, 150,
     'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=800&q=85',
     'عيد ميلاد,خروجة عائلية,احتفال عائلي', 'حديقة مفتوحة بمساحات لعب وأماكن مخصصة للشوي.'],
-  ['قاعة اللؤلؤة', 'القاهرة', 'القاهرة - مدينة نصر', 'قاعة', 4.7, 12000, 100, 500,
-    'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=85',
-    'خطوبة,احتفال عائلي,حفلات', 'قاعة فاخرة بطاولات أنيقة وتنظيم احترافي للمناسبات الكبيرة.'],
-  ['كافيه سكاي', 'الجيزة', 'الشيخ زايد - الجيزة', 'كافيه', 4.5, 1100, 10, 40,
-    'https://images.unsplash.com/photo-1493857671505-72967e2e2760?auto=format&fit=crop&w=800&q=85',
-    'أصحاب,عيد ميلاد,جلسات خارجية', 'كافيه بروف مفتوح بإطلالة بانورامية وجلسات مسائية.'],
   ['شاليه وادي الريان', 'الفيوم', 'وادي الريان', 'شاليه', 4.9, 5000, 15, 60,
     'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=800&q=85',
     'خروجة عائلية,مناسبة أخرى,أصحاب', 'شاليه على البحيرة مع تراس واسع وإطلالة على المحمية.']
@@ -433,9 +418,9 @@ app.post('/api/bookings', (req, res) => {
 
 app.get('/api/bookings/mine', auth, (req, res) => {
   const rows = db.prepare(`
-    SELECT b.*, v.name AS venue_name, v.city, v.image_url
+    SELECT b.*, COALESCE(v.name, 'مكان محذوف') AS venue_name, COALESCE(v.city, '') AS city, COALESCE(v.image_url, '') AS image_url
     FROM bookings b
-    JOIN venues v ON v.id = b.venue_id
+    LEFT JOIN venues v ON v.id = b.venue_id
     WHERE b.user_id = ?
     ORDER BY b.created_at DESC, b.id DESC
   `).all(req.user.id);
@@ -485,8 +470,8 @@ app.delete('/api/favorites/:venueId', auth, (req, res) => {
 
 app.get('/api/admin/bookings', auth, admin, (req, res) => {
   const rows = db.prepare(`
-    SELECT b.*, v.name AS venue_name
-    FROM bookings b JOIN venues v ON v.id = b.venue_id
+    SELECT b.*, COALESCE(v.name, 'مكان محذوف') AS venue_name
+    FROM bookings b LEFT JOIN venues v ON v.id = b.venue_id
     ORDER BY b.created_at DESC, b.id DESC
   `).all();
   res.json(rows);

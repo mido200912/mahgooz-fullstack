@@ -8,6 +8,7 @@ let currentUser = null;
 let authMode = 'login';
 let venueCache = [];
 let favoriteIds = new Set();
+let lastVenueRefresh = 0;
 
 /* ------------------------------ Helpers ----------------------------- */
 
@@ -214,7 +215,22 @@ function venueCard(venue) {
       <div class="venue-actions"><button class="btn btn-light btn-small" onclick="venueDetails(${Number(venue.id)})">التفاصيل</button><button class="btn btn-dark btn-small" onclick="openBooking(${Number(venue.id)})">احجز الآن</button></div></div></article>`;
 }
 
+function populateAreaFilter(venues) {
+  const select = document.getElementById('searchArea');
+  if (!select) return;
+
+  const previous = select.value;
+  const cities = [...new Set(venues.map(v => String(v.city || '').trim()).filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b, 'ar'));
+
+  select.innerHTML = '<option value="">كل المناطق</option>' +
+    cities.map(city => `<option value="${esc(city)}">${esc(city)}</option>`).join('');
+
+  select.value = cities.includes(previous) ? previous : '';
+}
+
 async function loadVenues() {
+  lastVenueRefresh = Date.now();
   const grid = document.getElementById('venueGrid');
   try {
     const response = await apiFetch('/api/venues');
@@ -223,6 +239,7 @@ async function loadVenues() {
     if (!Array.isArray(venues) || !venues.length) return;
 
     venueCache = venues;
+    populateAreaFilter(venues);
     grid.innerHTML = venues.map(venueCard).join('');
     if (authToken) await loadMyFavorites();
   } catch (error) {
@@ -518,4 +535,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   updateAuthUI();
   await Promise.all([loadVenues(), loadPackages(), restoreSession()]);
   prefillBookingForm();
+});
+
+// حدّث الأماكن وخانة المنطقة لما ترجع للصفحة بعد إضافة مكان من لوحة الإدارة
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible') return;
+  if (Date.now() - lastVenueRefresh < 3000) return;
+  loadVenues();
 });
